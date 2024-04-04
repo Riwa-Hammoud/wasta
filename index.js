@@ -12,6 +12,11 @@ const cors = require('cors');
 // Allow requests from all origins
 app.use(cors());
 
+// To allow requests only from specific origins:
+// app.use(cors({
+//     origin: 'http://your-flutter-app-domain.com'
+// }));
+
 dotenv.config();
 // to get variables from .env file => process.env.VARIABLE_NAME
 

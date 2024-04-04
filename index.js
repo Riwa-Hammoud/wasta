@@ -6,6 +6,11 @@ const authRoute = require("./routes/auth");
 const userRoute = require("./routes/user")
 const internshipRoute = require("./routes/internship")
 const bookMarkRoute = require("./routes/bookmark")
+const cors = require('cors');
+
+
+// Allow requests from all origins
+app.use(cors());
 
 dotenv.config();
 // to get variables from .env file => process.env.VARIABLE_NAME

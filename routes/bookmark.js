@@ -15,5 +15,4 @@ router.delete("/:id", verifyToken, bookmarkController.deleteBookmark);
 router.get("/:userId", bookmarkController.getBookmarks);
 
 
-
 module.exports = router

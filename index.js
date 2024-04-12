@@ -7,6 +7,7 @@ const userRoute = require("./routes/user")
 const internshipRoute = require("./routes/internship")
 const bookMarkRoute = require("./routes/bookmark")
 const cors = require('cors');
+const { Authorization }=require("./routes/authHelper")
 
 
 // Allow requests from all origins
@@ -29,6 +30,16 @@ app.use("/api/", authRoute)
 app.use("/api/users", userRoute)
 app.use("/api/internships", internshipRoute)
 app.use("/api/bookmarks", bookMarkRoute)
-//localhost:5001/api/users/id
+
+
+app.get('/api/linkedin/authorize', (req,res)=>{
+    return res.redirect(Authorization());
+});
+app.get('/api/linkedin/redirect', async(req, res)=>{
+    return res.json(Redirect(req.query.code));
+});
+
+
+//localhost:5001/api/users/id`
 
 app.listen(process.env.PORT || 5002, () => console.log(`Example app listening on port ${process.env.PORT}!`))

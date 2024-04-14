@@ -16,8 +16,8 @@ const Redirect =async (code)=> {
     const payload = {
         client_id: process.env.CLIENT_ID,
         client_secret: process.env.CLIENT_SECRET,
-        redirect_url: process.env.REDIRECT_URL,
-        grant_type: 'authorization code',
+        redirect_uri: process.env.REDIRECT_URL,
+        grant_type: 'authorization_code',
         code: code
 
     }
@@ -26,7 +26,7 @@ const Redirect =async (code)=> {
         url: `https://linkedin.com/oauth/v2/accessToken?${qs.stringify(payload)}`,
         method: 'POST',
         headers:{
-            'Content-Type': 'x-www-form-urlencoded'
+            'Content-Type': 'application/x-www-form-urlencoded'
         }
     }).then(response=>{
         return response;

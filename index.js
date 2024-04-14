@@ -7,7 +7,10 @@ const userRoute = require("./routes/user")
 const internshipRoute = require("./routes/internship")
 const bookMarkRoute = require("./routes/bookmark")
 const cors = require('cors');
-const { Authorization }=require("./routes/authHelper")
+const { Authorization } = require("./routes/authHelper")
+const express = require('express');
+const router = express.Router();
+const { Authorization, Redirect, getUserProfile } = require('../helpers/authHelper');
 
 
 // Allow requests from all origins
@@ -32,11 +35,28 @@ app.use("/api/internships", internshipRoute)
 app.use("/api/bookmarks", bookMarkRoute)
 
 
-app.get('/api/linkedin/authorize', (req,res)=>{
+// Authorization URL
+router.get('/linkedin/authorize', (req, res) => {
     return res.redirect(Authorization());
 });
-app.get('/api/linkedin/redirect', async(req, res)=>{
-    return res.json(Redirect(req.query.code));
+
+
+// Redirect URL
+router.get('/linkedin/redirect', async (req, res) => {
+    try {
+        const { code } = req.query;
+        const tokenResponse = await Redirect(code);
+        const accessToken = tokenResponse.access_token;
+
+        // Retrieve user profile using the access token
+        const userProfile = await getUserProfile(accessToken);
+
+        // You can handle the user profile data as needed, for example, saving it to the database or returning it as a response
+        return res.json(userProfile);
+    } catch (error) {
+        // Handle errors appropriately
+        return res.status(500).json({ error: error.message });
+    }
 });
 
 

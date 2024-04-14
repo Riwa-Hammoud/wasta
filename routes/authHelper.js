@@ -12,6 +12,20 @@ const Authorization=()=> {
     return encodeURI(`https://linkedin.com/oauth/v2/authorization?client_id=${process.env.CLIENT_ID}&response_type=code&scope=${process.env.SCOPE}&redirect_uri=${process.env.REDIRECT_URL}`);
 }
 
+const getUserProfile = async (accessToken) => {
+    try {
+        const response = await axios.get('https://api.linkedin.com/v2/me', {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Connection': 'Keep-Alive'
+            }
+        });
+        return response.data;
+    } catch (error) {
+        throw error.response.data.error_description;
+    }
+}
+
 const Redirect =async (code)=> {
     const payload = {
         client_id: process.env.CLIENT_ID,
@@ -39,5 +53,6 @@ const Redirect =async (code)=> {
 
 module.exports = {
     Authorization,
-    Redirect
+    Redirect,
+    getUserProfile
 }

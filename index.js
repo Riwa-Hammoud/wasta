@@ -20,6 +20,8 @@ app.use(express.json());
 // Load environment variables from .env file
 dotenv.config();
 
+const { Authorization, Redirect, getUserProfile } = require('./authHelper');
+
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URL)
   .then(() => console.log('Connected to MongoDB'))

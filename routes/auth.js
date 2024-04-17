@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const authController = require("../controllers/authContoller");
-const { Authorization, Redirect, getUserProfile } = require('authHelper');
+const { Authorization, Redirect, getUserProfile } = require('./authHelper');
 
 // REGISTRATION
 router.post("/register", authController.createUser);

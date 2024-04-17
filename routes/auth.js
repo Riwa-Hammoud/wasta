@@ -14,7 +14,7 @@ router.get("/linkedin/authorize", (req, res) => {
 });
 
 // LinkedIn Redirect
-router.get("/linkedin/redirect", async (req, res) => {
+router.get("/linkedin/redirect", async (req, res, next) => {
     try {
         const { code } = req.query;
         const tokenResponse = await Redirect(code);
@@ -26,8 +26,10 @@ router.get("/linkedin/redirect", async (req, res) => {
         // You can handle the user profile data as needed, for example, saving it to the database or returning it as a response
         return res.json(userProfile);
     } catch (error) {
-        // Handle errors appropriately
-        return res.status(500).json({ error: error.message });
+        // Safely access the error message
+        const errorMessage = error.message ? error.message : 'An unknown error occurred';
+        next(error);
+        return res.status(500).json({ error: errorMessage });
     }
 });
 

@@ -32,6 +32,11 @@ app.use("/api/users", userRoute);
 app.use("/api/internships", internshipRoute);
 app.use("/api/bookmarks", bookMarkRoute);
 
+app.use((err, req, res, next) => {
+  console.error(err);
+  const errorMessage = err.message ? err.message : 'An unknown error occurred';
+  res.status(500).json({ error: errorMessage });
+});
 
 // Start the server
 const PORT = process.env.PORT || 5002;

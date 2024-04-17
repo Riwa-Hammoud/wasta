@@ -14,7 +14,7 @@ router.get("/linkedin/authorize", (req, res) => {
 });
 
 // LinkedIn Redirect
-router.get("/linkedin/redirect", async (req, res, next) => {
+router.get("/api/linkedin/redirect", async (req, res, next) => {
     try {
         console.log("Hit /api/linkedin/redirect");
         const { code } = req.query;

@@ -27,9 +27,7 @@ router.get("/linkedin/redirect", async (req, res, next) => {
         return res.json(userProfile);
     } catch (error) {
         // Safely access the error message
-        const errorMessage = error.message ? error.message : 'An unknown error occurred';
         next(error);
-        return res.status(500).json({ error: errorMessage });
     }
 });
 

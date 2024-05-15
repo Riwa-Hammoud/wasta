@@ -2,23 +2,24 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 
 const verifyToken = (req, res, next) => {
+    console.log('Attempting to verify token...');
     const authHeader = req.headers.authorization;
-
-    try {
-        if (authHeader) {
-            const token = authHeader.split(" ")[1];
-            const decodedToken = jwt.verify(token, process.env.JWT_SEC);
-
-            req.user = decodedToken;
-            next();
-        } else {
-            return res.status(401).json({ error: 'You are not authenticated' });
-        }
-    } catch (error) {
-        console.error('Error verifying token:', error);
-        return res.status(403).json('Invalid token');
+    console.log('Received Auth Header:', authHeader);
+    if (!authHeader) {
+        return res.status(401).json({ error: 'No token provided.' });
     }
+    const token = authHeader.split(' ')[1]; // Bearer <token>
+    console.log('Token:', token);
+    jwt.verify(token, process.env.JWT_SEC, (err, decoded) => {
+        if (err) {
+            console.error('JWT verification error:', err);
+            return res.status(403).json({ error: 'Invalid token.' });
+        }
+        req.user = decoded;
+        next();
+    });
 };
+
 
 
 const verifyAndAuthorization = (req, res, next) => {

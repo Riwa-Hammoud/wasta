@@ -65,7 +65,7 @@ module.exports = {
                     $search: {
                         index: "internshipsearch",
                         text: {
-                            query: req.params.key,
+                            query: req.query.key,
                             path: {
                                 wildcard: "*"
                             }

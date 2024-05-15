@@ -1,16 +1,16 @@
 const router = require("express").Router();
-const {verifyAndAuthorization, verifyToken, verifyAndAdmin} = require("../middleware/verifyToken");
+const {verifyAndAuthorization, verifyToken, verifyAndAdmin, verifyAndAgent} = require("../middleware/verifyToken");
 const InternshipController = require("../controllers/InternshipController")
 
 
 // POST INTERNSHIP
-router.post("/", verifyAndAdmin, InternshipController.createInternship)
+router.post("/", verifyAndAgent, InternshipController.createInternship)
 
 // Update INTERNSHIP 
-router.put("/:id", verifyAndAdmin, InternshipController.updateInternship)
+router.put("/:id", verifyAndAgent, InternshipController.updateInternship)
 
 // DELETE INTERNSHIP
-router.delete("/:id", verifyAndAdmin, InternshipController.deleteInternship)
+router.delete("/:id", verifyAndAgent, InternshipController.deleteInternship)
 
 // GET INTERNSHIP
 router.get("/:id", InternshipController.getInternship)

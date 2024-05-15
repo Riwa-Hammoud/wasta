@@ -2,25 +2,32 @@ const User = require("../models/User");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+
 module.exports = {
     createUser: async (req, res) => {
-        const salt = bcrypt.genSaltSync(10);
-        const newUser = new User ({
-            username: req.body.username,
-            email: req.body.email,
-            password: bcrypt.hashSync(req.body.password, salt).toString(),
-            skills: req.body.skills
-        });
-
         try {
+            if (!req.body.username || !req.body.email || !req.body.password || !req.body.skills) {
+                return res.status(400).json({ message: "Missing required fields" });
+            }    
+            const salt = bcrypt.genSaltSync(10);
+            const hashedPassword = bcrypt.hashSync(req.body.password, salt);
+    
+            const newUser = new User({
+                username: req.body.username,
+                email: req.body.email,
+                password: hashedPassword,
+                skills: req.body.skills
+            });
+    
             const savedUser = await newUser.save();
-
-            res.status(201).json(savedUser)
-            
+            res.status(201).json(savedUser);
         } catch (error) {
-            res.status(500).json(error)
+            if (error.code === 11000) { // Duplicate key error
+                res.status(400).json({ message: "Username or email already exists" });
+            } else {
+                res.status(500).json({ message: "An error occurred", error: error });
+            }
         }
-
     },
 
     //login function
@@ -56,11 +63,11 @@ module.exports = {
     
             const { password, __v, createdAt, ...others } = user._doc;
     
-            const token = jwt.sign({ userId: user.id, isAdmin: user.isAdmin }, process.env.SECRET, { expiresIn: '1h' });
+            // Include userType in the JWT payload
+            const token = jwt.sign({ userId: user.id, isAdmin: user.isAdmin, userType: user.userType }, process.env.SECRET, { expiresIn: '1h' });
             res.status(200).json({ ...others, token }); // Use spread operator to include other properties
         } catch (error) {
             res.status(500).json(error);
         }
     }
-    
 }

@@ -59,26 +59,16 @@ const verifyAndAgent = (req, res, next) => {
         console.log('Token verified successfully');
         console.log('Decoded Token:', req.user);
 
-        // Assuming isAgent is a property in the user object
+        // Check if the user has the required role
         if (req.user.isAgent) {
-            console.log('User is a company');
+            console.log('User is a company agent');
             next();
         } else {
-            console.log('Access restriction error: User is not a company agent');
+            console.log('Access restriction error: User does not have the required role');
             res.status(403).json({ error: 'You are restricted from performing this operation, you should be a company' });
         }
     });
 };
 
-function checkUserType(requiredType) {
-    return (req, res, next) => {
-        const userType = req.user.userType;
-        if (userType === requiredType) {
-            next();
-        } else {
-            res.status(403).send('Forbidden');
-        }
-        };
-    }
 
-module.exports = {verifyToken, verifyAndAuthorization, verifyAndAdmin, checkUserType, verifyAndAgent};
+module.exports = {verifyToken, verifyAndAuthorization, verifyAndAdmin, verifyAndAgent};

@@ -51,21 +51,21 @@ module.exports = {
     loginUser: async (req, res) => {
         try {
             const user = await User.findOne({ email: req.body.email });
-    
+
             if (!user) {
                 return res.status(401).json("Wrong Login Details");
             }
-    
-            const validPassword = bcrypt.compareSync(req.body.password, user.password);
+
+            const validPassword = await bcrypt.compare(req.body.password, user.password);
             if (!validPassword) {
                 return res.status(401).json("Wrong Password");
             }
-    
-            const { password, __v, createdAt, ...others } = user._doc;
-    
+
+            const { password, __v, createdAt,...others } = user._doc;
+
             // Include userType in the JWT payload
-            const token = jwt.sign({ userId: user.id, isAdmin: user.isAdmin, userType: user.userType }, process.env.SECRET, { expiresIn: '1h' });
-            res.status(200).json({ ...others, token }); // Use spread operator to include other properties
+            const token = jwt.sign({ userId: user.id, isAdmin: user.isAdmin, isAgent: user.isAgent }, process.env.SECRET, { expiresIn: '1h' });
+            res.status(200).json({...others, token }); // Use spread operator to include other properties
         } catch (error) {
             res.status(500).json(error);
         }

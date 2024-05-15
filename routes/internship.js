@@ -4,7 +4,7 @@ const InternshipController = require("../controllers/InternshipController")
 
 
 // POST INTERNSHIP
-router.post("/", verifyAndAgent, InternshipController.createInternship)
+router.post("/", verifyAndAdmin, InternshipController.createInternship)
 
 // Update INTERNSHIP 
 router.put("/:id", verifyAndAgent, InternshipController.updateInternship)

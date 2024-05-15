@@ -9,7 +9,7 @@ const InternshipSchema = new mongoose.Schema(
         period: {type: String, required: true},
         contract: {type: String, required: true},
         requirements: {type: Array, required: true},
-        imageUrl: {type: String, required: true},
+        imageUrl: {type: String, required: false},
         agentId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",

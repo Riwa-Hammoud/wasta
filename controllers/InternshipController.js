@@ -59,9 +59,14 @@ module.exports = {
     },
 
     searchInternships: async (req, res) => {
+        // Validate input
+        if (!req.query.key || typeof req.query.key!== 'string') {
+            return res.status(400).json({ message: "Invalid query parameter." });
+        }
+    
         try {
-            const results = await Internship.aggregate(
-                [{
+            const results = await Internship.aggregate([
+                {
                     $search: {
                         index: "internshipsearch",
                         text: {
@@ -71,11 +76,13 @@ module.exports = {
                             }
                         }
                     }
-                }]
-            )
+                }
+            ]);
             res.status(200).json(results);
         } catch (error) {
-            res.status(500).json(error);
+            console.error(error); // Log the error for debugging
+            res.status(500).json({ message: "An error occurred while searching internships." });
         }
     },
+    
 }

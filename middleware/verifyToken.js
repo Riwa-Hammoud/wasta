@@ -47,7 +47,7 @@ const verifyAndAdmin = (req, res, next) => {
             next();
         } else {
             console.log('Access restriction error: User is not an admin');
-            res.status(403).json({ error: 'You are restricted from performing this operation' });
+            res.status(403).json({ error: 'You are restricted from performing this operation,you should be an admin' });
         }
     });
 };
@@ -57,7 +57,7 @@ const verifyAndAgent = (req, res, next) => {
         console.log('Token verified successfully');
         console.log('Decoded Token:', req.user);
 
-        // Assuming isAdmin is a property in the user object
+        // Assuming isAgent is a property in the user object
         if (req.user.isAgent) {
             console.log('User is a company');
             next();

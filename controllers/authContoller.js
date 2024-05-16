@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 module.exports = {
     createUser: async (req, res) => {
         try {
-            if (!req.body.username || !req.body.email || !req.body.password || !req.body.skills) {
+            if (!req.body.username || !req.body.email || !req.body.password) {
                 return res.status(400).json({ message: "Missing required fields" });
             }    
             const salt = bcrypt.genSaltSync(10);
@@ -16,7 +16,6 @@ module.exports = {
                 username: req.body.username,
                 email: req.body.email,
                 password: hashedPassword,
-                skills: req.body.skills
             });
     
             const savedUser = await newUser.save();
